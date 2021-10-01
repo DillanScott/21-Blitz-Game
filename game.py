@@ -3,7 +3,6 @@ import random
 from time import sleep
 from threading import Thread
 import os
-import sys
 
 done = False
 timeLeft = 180
