@@ -3,17 +3,23 @@ import random
 from time import sleep
 from threading import Thread
 import os
+import sys
+
+done = False
+timeLeft = 10
 
 
 # 3 minute timer to finish the game
 def timer():
     global timeLeft
-    timeLeft = 180
     while timeLeft > 0:
         sleep(1)
         timeLeft -= 1
-    print('\n\nTimes up!')
-    finishedGame()
+        if done:
+            break
+    else:
+        print('\n\nTimes up!')
+        finishedGame()
 
 
 # Check the status of the column where a card was added
@@ -52,6 +58,8 @@ def checkColumn(column):
 
 # Finalises the user's score and outputs it
 def finishedGame():
+    global done
+    done = True
     gameBoard.points += (timeLeft * 10)
     if gameBoard.streak > 0:
         gameBoard.points += (125 * (gameBoard.streak - 1) ** 2 + 125 * (gameBoard.streak - 1))
@@ -63,6 +71,7 @@ def finishedGame():
     print('\nTime left:', timeLeft)       
     print('You finished with a score of:', gameBoard.points)
 
+    
 
 
 # Main game in a function for threading
@@ -100,7 +109,6 @@ def game():
         print(topCard)
 
         # Asks where to place the top card and removes it from deck
-        print(gameBoard.streak)
         chosenColumn = int(input('\nWhich column would you like to add this card to?'))
         
         if chosenColumn == 1:
@@ -118,13 +126,18 @@ def game():
         if chosenColumn == 4:
             gameBoard.col4.addCard(topCard)
             checkColumn(gameBoard.col4)
+        
 
         shuffledDeck.pop(0)
-        
-        #os.system('cls' if os.name == 'nt' else 'clear')
+
+        if timeLeft == 0:
+            break
+
+        os.system('cls' if os.name == 'nt' else 'clear')
         gameBoard.output()
 
-    finishedGame()
+    else:
+        finishedGame()
 
 
 
