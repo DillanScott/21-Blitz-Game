@@ -6,9 +6,7 @@ import os
 import sys
 
 done = False
-timeLeft = 10
-
-
+timeLeft = 180
 # 3 minute timer to finish the game
 def timer():
     global timeLeft
@@ -70,10 +68,9 @@ def finishedGame():
             gameBoard.points += 900
     print('\nTime left:', timeLeft)       
     print('You finished with a score of:', gameBoard.points)
+    os._exit(1)
 
     
-
-
 # Main game in a function for threading
 def game():
     # Creates a deck of cards (colours only, no suits)
@@ -109,8 +106,7 @@ def game():
         print(topCard)
 
         # Asks where to place the top card and removes it from deck
-        chosenColumn = int(input('\nWhich column would you like to add this card to?'))
-        
+        chosenColumn = int(input('\nWhich column would you like to add this card to?'))        
         if chosenColumn == 1:
             gameBoard.col1.addCard(topCard)
             checkColumn(gameBoard.col1)
